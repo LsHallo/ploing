@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Admin</title>
+</head>
+<body>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Players</th>
+            <th>started</th>
+        </tr>
+    {{#lobbies}}
+        <tr>
+            <td>/lobby/{{id}}</td>
+            <td>
+                <table>
+                    <tr>
+                        <th>ID</th>
+                        <th>Ready</th>
+                    </tr>
+                    {{#players}}
+                    <tr>
+                        <td>{{id}}</td>
+                        <td>{{ready}}</td>
+                    </tr>
+                    {{/players}}
+                </table>
+            </td>
+            <td>{{game.running}}</td>
+        </tr>
+    {{/lobbies}}
+    </table>
+</body>
+</html>

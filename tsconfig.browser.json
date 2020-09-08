@@ -1,13 +1,14 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "es2020",
+    "target": "es2015",
     "esModuleInterop": true,
-    "target": "es6",
     "noImplicitAny": true,
     "moduleResolution": "node",
     "sourceMap": true,
-    "outDir": "dist/server",
+    "outDir": "dist/client",
     "baseUrl": ".",
+    "lib": ["es2016", "dom", "es5"],
     "paths": {
       "*": [
         "node_modules/*"
@@ -15,6 +16,6 @@
     }
   },
   "include": [
-    "src/server/*"
+    "src/client/*"
   ]
 }
