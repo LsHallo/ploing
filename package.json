@@ -4,8 +4,7 @@
   "description": "",
   "main": "dist/server/main.js",
   "scripts": {
-    "build": "tsc",
-    "prestart": "npm run build",
+    "build": "tsc -p tsconfig.json && webpack && copyfiles pages/**/* dist/",
     "start": "node .",
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "npm-run-all --parallel watch:tsc watch:files watch:nodemon",
@@ -13,8 +12,7 @@
     "watch:client": "webpack --watch",
     "watch:tsc": "npm-run-all --parallel watch:client watch:server",
     "watch:files": "copy-and-watch --watch pages/**/* dist/pages",
-    "watch:nodemon": "nodemon --watch dist/server/main.js --watch dist/server --watch dist/pages -e js,json,mjs,html,mustache",
-    "postbuild": "copyfiles pages/**/*.html dist/"
+    "watch:nodemon": "nodemon --watch dist/server/main.js --watch dist/server --watch dist/pages -e js,json,mjs,html,mustache"
   },
   "keywords": [],
   "author": "",
