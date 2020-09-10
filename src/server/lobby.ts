@@ -1,57 +1,54 @@
 import {generateId} from './random';
-import Player from './player';
 import Game from "./game";
-import {Direction} from './enums'
 
 export default class Lobby {
     id: string;
     private io: any;
     private namespace: any;
-    private players: Player[];
     private game: Game;
 
     constructor(io: any) {
         this.id = generateId();
         this.io = io;
-        this.players = [];
-        this.game = new Game();
         this.namespace = this.io.of('/lobby/' + this.id);
+        this.game = new Game(this.namespace);
         this.namespace.on('connection', (socket: any) => {
             console.log("[Socket.IO]: New connection from client: "+ socket.id);
-            if(this.players.length < 2) {
-                this.players.push(new Player(this.io, socket.id));
+            if(this.game.players.length < 2) {
+                this.game.playerJoin(socket.id);
+                if(this.game.running) {
+                    socket.emit('game-start');
+                }
             } else {
                 socket.emit('lobby-full');
                 socket.disconnect();
             }
             socket.on('disconnect', () => {
                 console.log("[Socket.IO]: Client '" + socket.id + "' disconnected!");
-                this.players.splice(this.players.indexOf(this.getPlayer(socket.id)), 1);
+                this.game.playerLeave(socket.id);
             });
             socket.on('player-ready', (data: boolean) => {
                 console.log('[Socket.IO]: Player \'' + socket.id + '\' is ready!');
-                this.getPlayer(socket.id).ready = data;
-                if(this.allPlayersReady() && this.players.length == 2) {
+                this.game.getPlayer(socket.id).ready = data;
+                if(this.allPlayersReady() && this.game.players.length == 2 && !this.game.running) {
                     this.game.start();
+                    this.namespace.emit('game-start');
                 }
             });
-            socket.on('direction-update', (data: any) => {
-                console.log(<Direction>data);
+            socket.on('paddle-update', (data: any) => {
+                console.log('[Socket.IO]: paddle-update: ' + data);
+                for(let player of this.game.players) {
+                    if(player.id !== socket.id) {
+                        this.namespace.to(player.id).emit('paddle-update', data);
+                    }
+                }
             });
         });
     }
 
-    getPlayer(id: string): Player {
-        for(let player of this.players) {
-            if(player.id === id) {
-                return player;
-            }
-        }
-    }
-
     allPlayersReady(): boolean {
         let ready = true;
-        for(let player of this.players) {
+        for(let player of this.game.players) {
             if(!player.ready) {
                 ready = false;
             }

@@ -1,11 +1,11 @@
 export default class Player {
     id: string;
-    private io: any;
     ready: boolean;
+    paddleHeight: number;
 
-    constructor(io: any, id: string) {
+    constructor(id: string) {
         this.id = id;
-        this.io = io;
         this.ready = false;
+        this.paddleHeight = 0;
     }
 }

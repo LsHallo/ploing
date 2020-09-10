@@ -5,9 +5,9 @@ import Ball from "./ball";
 export default class Game {
     private io: any;
     public paddles: Paddle[];
-    private ball: Ball;
+    ball: Ball;
     private readonly ctx: CanvasRenderingContext2D;
-    private lastState: Direction;
+    private lastState: number;
     direction: Direction;
     private started: boolean;
 
@@ -44,20 +44,23 @@ export default class Game {
         //Draw score
     }
 
-    update() {
+    update(delta: number) {
         if(this.started) {
             if (this.direction !== Direction.NONE) {
-                this.paddles[0].move(this.direction);
+                this.paddles[0].move(this.direction, delta);
             }
 
-            if (this.direction != this.lastState) {
-                this.io.emit('direction-update', this.direction);
+            this.ball.update(delta);
+
+            if (this.paddles[0].y != this.lastState) {
+                this.io.emit('paddle-update', this.paddles[0].y / this.ctx.canvas.clientHeight);
             }
-            this.lastState = this.direction;
+            this.lastState = this.paddles[0].y;
         }
     }
 
     start() {
+        console.log('start game');
         this.started = true;
     }
 }
