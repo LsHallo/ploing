@@ -1,6 +1,6 @@
 import Player from "./player";
 import Ball from "./ball";
-import {target_frame_rate} from "./enums";
+import {targetFrameRate} from "./enums";
 
 export default class Game {
     namespace: any;
@@ -8,27 +8,37 @@ export default class Game {
     ball: Ball;
     players: Player[];
     lastUpdate: number;
-    private targetUpdate: number = 1000 / target_frame_rate;
+    private targetUpdate: number = 1000 / targetFrameRate;
 
     constructor(namespace: any) {
         this.namespace = namespace;
         this.running = false;
-        this.players = [];
+        this.players = [null, null];
         this.ball = new Ball();
     }
 
     playerJoin(id: string) {
-        this.players.push(new Player(id));
+        for(let i = 0; i < this.players.length; i++) {
+            if(this.players[i] === null) {
+                this.players[i] = new Player(id);
+                return;
+            }
+        }
     }
 
     playerLeave(id: string) {
-        this.players.splice(this.players.indexOf(this.getPlayer(id)), 1);
+        let index = this.players.indexOf(this.getPlayer(id));
+        if(index >= 0) {
+            this.players[index] = null;
+        }
     }
 
     getPlayer(id: string): Player {
         for(let player of this.players) {
-            if(player.id === id) {
-                return player;
+            if(player !== null) {
+                if (player.id === id) {
+                    return player;
+                }
             }
         }
     }
@@ -43,13 +53,27 @@ export default class Game {
     update() {
         let time = new Date().getTime();
         let delta = (time - this.lastUpdate) / this.targetUpdate;
-        if(this.ball.update(delta)) {
-            this.namespace.emit('ball-pos', this.ball.position);
+        let update = this.ball.update(delta, this.players);
+        if(update !== undefined) {
+            this.namespace.emit('ball-pos', this.ball.pos);
             this.namespace.emit('ball-speed', this.ball.speed);
+            if(update !== -1) {
+                this.namespace.emit('score', update);
+                this.players[update].score++;
+            }
         }
-        this.namespace.emit('server-ball', this.ball.position);
+        this.namespace.emit('server-ball', this.ball.pos);
 
         setTimeout(this.update.bind(this), this.targetUpdate);
         this.lastUpdate = time;
+    }
+
+    full() {
+        for(let player of this.players) {
+            if(player === null) {
+                return false;
+            }
+        }
+        return true;
     }
 }

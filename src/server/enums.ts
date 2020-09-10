@@ -9,6 +9,13 @@ export enum Direction {
     NONE
 }
 
-export const target_frame_rate = 30;
-export const ball_size = 0.05;
-export const ball_initial_speed = 0.02;
+
+//Server client shared constants
+export const targetFrameRate = 30;
+
+export const ballSize = 0.04;
+export const ballInitialSpeed = 0.02;
+
+export const paddleHeight = 0.15;
+export const paddleWidth = 0.02;
+export const paddleMove = 0.015;

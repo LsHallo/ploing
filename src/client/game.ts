@@ -9,7 +9,9 @@ export default class Game {
     private readonly ctx: CanvasRenderingContext2D;
     private lastState: number;
     direction: Direction;
+    playerNumber: number;
     private started: boolean;
+    scores: number[] = [0, 0];
 
     constructor(io: any, context: CanvasRenderingContext2D) {
         this.io = io;
@@ -39,9 +41,16 @@ export default class Game {
         }
 
         //Draw ball
-        this.ball.draw();
+        this.ball.draw(this.playerNumber);
 
         //Draw score
+        this.ctx.fillStyle = '#FFFFFF';
+        this.ctx.font = '30px "8 Bit", Arial';
+        for(let i = 0; i < this.scores.length; i++) {
+            let x = i === 0?-35:35;
+            this.ctx.textAlign = i === 0?'right':'left';
+            this.ctx.fillText(this.scores[i].toString(), this.ctx.canvas.clientWidth / 2 + x, 40);
+        }
     }
 
     update(delta: number) {
@@ -53,7 +62,7 @@ export default class Game {
             this.ball.update(delta);
 
             if (this.paddles[0].y != this.lastState) {
-                this.io.emit('paddle-update', this.paddles[0].y / this.ctx.canvas.clientHeight);
+                this.io.emit('paddle-update', this.paddles[0].y);
             }
             this.lastState = this.paddles[0].y;
         }

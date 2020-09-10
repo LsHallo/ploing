@@ -1,5 +1,5 @@
 import io from 'socket.io-client';
-import {Direction, target_frame_rate} from "../server/enums";
+import {Direction, targetFrameRate} from "../server/enums";
 import Game from "./game";
 import Vector from "../server/vector";
 
@@ -39,12 +39,16 @@ socket.on('connect', () => {
 socket.on('lobby-full', () => {
     alert('Lobby already full!');
     socket.disconnect();
-})
+});
+socket.on('player-num', (data: number) => {
+   game.playerNumber = data;
+   console.log('You are player number ' + data);
+});
 socket.on('game-start', () => {
     game.start();
 });
 socket.on('paddle-update', (data: any) => {
-    game.paddles[1].y = data * ctx.canvas.clientHeight;
+    game.paddles[1].y = data;
 });
 socket.on('ball-pos', (data: any) => {
     game.ball.setPosition(data);
@@ -55,6 +59,10 @@ socket.on('ball-speed', (data: any) => {
 socket.on('server-ball', (data: Vector) => {
     server_ball = data;
 });
+socket.on('score', (data: any) => {
+    console.log('Player ' + data + ' scores!');
+    game.scores[data]++;
+})
 
 let lastTime = new Date().getTime();
 draw();
@@ -64,7 +72,9 @@ function draw() {
 
     //FPS display
     let time = new Date().getTime();
-    ctx.fillText(Math.round(1000 / (time - lastTime)).toString() + "fps", 20, 20);
+    ctx.fillStyle = '#C3C3C3';
+    ctx.font = '18px Arial';
+    ctx.fillText(Math.round(1000 / (time - lastTime)).toString() + "fps", 2, 20);
     lastTime = time;
 
     ctx.fillStyle = '#FF0000';
@@ -75,7 +85,7 @@ let lastUpdate = new Date().getTime();
 update();
 function update() {
     let time = new Date().getTime();
-    let delta = (time - lastUpdate) / (1000 / target_frame_rate);
+    let delta = (time - lastUpdate) / (1000 / targetFrameRate);
     game.update(delta);
     setTimeout(update, 1000 / 60);
     lastUpdate = time;

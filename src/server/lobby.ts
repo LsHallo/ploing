@@ -14,11 +14,12 @@ export default class Lobby {
         this.game = new Game(this.namespace);
         this.namespace.on('connection', (socket: any) => {
             console.log("[Socket.IO]: New connection from client: "+ socket.id);
-            if(this.game.players.length < 2) {
+            if(!this.game.full()) {
                 this.game.playerJoin(socket.id);
                 if(this.game.running) {
                     socket.emit('game-start');
                 }
+                socket.emit('player-num', this.game.players.indexOf(this.game.getPlayer(socket.id)));
             } else {
                 socket.emit('lobby-full');
                 socket.disconnect();
@@ -38,8 +39,13 @@ export default class Lobby {
             socket.on('paddle-update', (data: any) => {
                 console.log('[Socket.IO]: paddle-update: ' + data);
                 for(let player of this.game.players) {
-                    if(player.id !== socket.id) {
-                        this.namespace.to(player.id).emit('paddle-update', data);
+                    if(player !== null) {
+                        if (player.id !== socket.id) {
+                            this.namespace.to(player.id).emit('paddle-update', data);
+                        }
+                        if(player.id === socket.id) {
+                            player.paddleHeight = data;
+                        }
                     }
                 }
             });
@@ -49,8 +55,10 @@ export default class Lobby {
     allPlayersReady(): boolean {
         let ready = true;
         for(let player of this.game.players) {
-            if(!player.ready) {
-                ready = false;
+            if(player !== null) {
+                if (!player.ready) {
+                    ready = false;
+                }
             }
         }
         return ready;

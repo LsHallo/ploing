@@ -1,27 +1,24 @@
-import {Direction, Side} from "../server/enums";
+import {Direction, paddleHeight, paddleMove, paddleWidth, Side} from "../server/enums";
 
 
 export default class Paddle {
     private ctx: CanvasRenderingContext2D;
     public y: number;
     private readonly side: Side;
-    private move_amount = 7.5;
-    private width: number = 25;
-    height: number = 125;
+    private move_amount = paddleMove;
+    private width: number = paddleWidth;
+    height: number = paddleHeight;
 
     constructor(side: Side, context: CanvasRenderingContext2D) {
         this.ctx = context;
-        let scaleFactor = this.ctx.canvas.clientHeight / 500;
-        this.y = this.ctx.canvas.clientHeight / 2;
+        this.y = 0.5;
         this.side = side;
-        this.height *= scaleFactor;
-        this.move_amount *= scaleFactor;
     }
 
     move(direction: Direction, delta: number) {
         this.y += (direction === Direction.UP?-this.move_amount:this.move_amount);
-        if(this.y >= this.ctx.canvas.clientHeight - this.height / 2) {
-            this.y = this.ctx.canvas.clientHeight - this.height / 2;
+        if(this.y >= 1 - this.height / 2) {
+            this.y = 1 - this.height / 2;
         }
         if(this.y <= this.height / 2) {
             this.y = this.height / 2;
@@ -29,8 +26,13 @@ export default class Paddle {
     }
 
     draw() {
-        let x = this.side === Side.LEFT?0:this.ctx.canvas.clientWidth - this.width;
+        let width = this.width * this.ctx.canvas.clientWidth;
+        let height = this.height * this.ctx.canvas.clientHeight;
+
+        let x = this.side === Side.LEFT?width / 2:this.ctx.canvas.clientWidth - width / 2;
         this.ctx.fillStyle = '#FFFFFF';
-        this.ctx.fillRect(x, this.y - this.height / 2, this.width, this.height);
+        this.ctx.fillRect(x - width / 2, this.y * this.ctx.canvas.clientHeight - height / 2, width, height);
+        this.ctx.fillStyle = '#FF0000';
+        this.ctx.fillRect(x - 3, this.y * this.ctx.canvas.clientHeight - 3, 6, 6);
     }
 }

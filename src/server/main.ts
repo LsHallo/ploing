@@ -12,6 +12,7 @@ let lobbies: Lobby[] = [];
 app.set('views', path.join(__dirname, '../pages'));
 app.use('/client', express.static(path.join(__dirname, '../client')));
 app.use('/css', express.static(path.join(__dirname, '../css')));
+app.use('/fonts', express.static(path.join(__dirname, '../fonts')));
 app.engine('mustache', mustache());
 app.set('view engine', 'mustache');
 app.get('/', (req, res) => {
