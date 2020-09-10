@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/server/main.js",
   "scripts": {
-    "build": "tsc -p tsconfig.json && webpack && copyfiles pages/**/* dist/",
+    "build": "tsc -p tsconfig.json && webpack && copyfiles pages/**/* dist/ && sass sass:dist/css",
     "start": "node .",
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "npm-run-all --parallel watch:tsc watch:files watch:nodemon",
