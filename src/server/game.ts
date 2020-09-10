@@ -59,7 +59,9 @@ export default class Game {
             this.namespace.emit('ball-speed', this.ball.speed);
             if(update !== -1) {
                 this.namespace.emit('score', update);
-                this.players[update].score++;
+                if(this.players[update] !== null) {
+                    this.players[update].score++;
+                }
             }
         }
         this.namespace.emit('server-ball', this.ball.pos);
