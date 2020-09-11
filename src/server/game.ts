@@ -9,6 +9,7 @@ export default class Game {
     players: Player[];
     lastUpdate: number;
     private targetUpdate: number = 1000 / targetFrameRate;
+    lastFps: number;
 
     constructor(namespace: any) {
         this.namespace = namespace;
@@ -48,20 +49,22 @@ export default class Game {
         let delta = (time - this.lastUpdate) / this.targetUpdate;
         let update = this.ball.update(delta, this.players);
         if(update !== undefined) {
-            this.namespace.emit('ball-pos', this.ball.pos);
-            this.namespace.emit('ball-speed', this.ball.speed);
             if(update !== -1) {
-                this.namespace.emit('score', update);
+                this.namespace.emit('ball-update', [this.ball.pos, this.ball.speed, update]);
+                //this.namespace.emit('score', update);
                 if(this.players[update] !== null) {
                     this.players[update].score++;
                 }
+            } else {
+                this.namespace.emit('ball-update', [this.ball.pos, this.ball.speed]);
             }
         }
-        this.namespace.emit('server-ball', this.ball.pos);
+        //this.namespace.emit('server-ball', this.ball.pos);
 
         if(this.running) {
             setTimeout(this.update.bind(this), this.targetUpdate);
         }
+        this.lastFps = 1000 / (time - this.lastUpdate);
         this.lastUpdate = time;
     }
 

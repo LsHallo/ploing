@@ -9,6 +9,7 @@ canvasSize();
 let ctx = canvas.getContext('2d');
 let game = new Game(socket, ctx);
 let server_ball: Vector = new Vector(0,0);
+(<any>window).debug = localStorage.debug === 'pong';
 
 window.addEventListener('keydown', (e) => {
     if(e.code === 'ArrowUp' || e.code === 'KeyW') {
@@ -62,17 +63,15 @@ socket.on('game-stop', () => {
 socket.on('paddle-update', (data: any) => {
     game.paddles[1].y = data;
 });
-socket.on('ball-pos', (data: any) => {
-    game.ball.setPosition(data);
-});
-socket.on('ball-speed', (data: any) => {
-    game.ball.setSpeed(data);
+socket.on('ball-update', (data: any) => {
+    game.ball.setPosition(data[0]);
+    game.ball.setSpeed(data[1]);
+    if(data[2] === 0 || data[2] === 1) {
+        game.scores[data[2]]++;
+    }
 });
 socket.on('server-ball', (data: Vector) => {
     server_ball = data;
-});
-socket.on('score', (data: any) => {
-    game.scores[data]++;
 });
 socket.on('score-initial', (data: any) => {
     game.scores = data;
@@ -91,7 +90,7 @@ function draw() {
     ctx.fillText(Math.round(1000 / (time - lastTime)).toString() + "fps", 2, 20);
     lastTime = time;
 
-    if(localStorage.debug === 'pong') {
+    if((<any>window).debug) {
         ctx.fillStyle = '#FF0000';
         ctx.fillRect(Math.abs((game.playerNumber === 0 ? 0 : 1) - server_ball.x) * ctx.canvas.clientWidth, server_ball.y * ctx.canvas.clientHeight, 5, 5);
     }

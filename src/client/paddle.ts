@@ -32,7 +32,7 @@ export default class Paddle {
         let x = this.side === Side.LEFT?width / 2:this.ctx.canvas.clientWidth - width / 2;
         this.ctx.fillStyle = '#FFFFFF';
         this.ctx.fillRect(x - width / 2, this.y * this.ctx.canvas.clientHeight - height / 2, width, height);
-        if(localStorage.debug === 'pong') {
+        if((<any>window).debug) {
             this.ctx.fillStyle = '#FF0000';
             this.ctx.fillRect(x - 3, this.y * this.ctx.canvas.clientHeight - 3, 6, 6);
         }
