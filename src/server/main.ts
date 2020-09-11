@@ -1,6 +1,7 @@
 import express from 'express';
 import Lobby from './lobby'
 import path from "path";
+import lobby from "./lobby";
 const port = process.env.PORT || 3560;
 const app = express();
 const server = require('http').createServer(app);

@@ -1,5 +1,5 @@
 import Paddle from "./paddle";
-import {Direction, Side} from "../server/enums";
+import {Direction, paddleHeight, Side} from "../server/enums";
 import Ball from "./ball";
 
 export default class Game {
@@ -8,9 +8,9 @@ export default class Game {
     ball: Ball;
     private readonly ctx: CanvasRenderingContext2D;
     private lastState: number;
-    direction: Direction;
+    direction: Direction = Direction.NONE;
     playerNumber: number;
-    private started: boolean;
+    private started: boolean = false;
     scores: number[] = [0, 0];
 
     constructor(io: any, context: CanvasRenderingContext2D) {
@@ -18,8 +18,6 @@ export default class Game {
         this.ctx = context;
         this.paddles = [new Paddle(Side.LEFT, this.ctx), new Paddle(Side.RIGHT, this.ctx)];
         this.ball = new Ball(this.ctx);
-        this.direction = Direction.NONE;
-        this.started = false;
     }
 
     draw() {
@@ -45,11 +43,16 @@ export default class Game {
 
         //Draw score
         this.ctx.fillStyle = '#FFFFFF';
-        this.ctx.font = '30px "8 Bit", Arial';
+        this.ctx.font = window.innerHeight * 0.06 + 'px "8 Bit", Arial';
         for(let i = 0; i < this.scores.length; i++) {
-            let x = i === 0?-35:35;
-            this.ctx.textAlign = i === 0?'right':'left';
-            this.ctx.fillText(this.scores[i].toString(), this.ctx.canvas.clientWidth / 2 + x, 40);
+            let x = i === this.playerNumber?-35:35;
+            this.ctx.textAlign = i === this.playerNumber?'right':'left';
+            this.ctx.fillText(this.scores[i].toString(), this.ctx.canvas.clientWidth / 2 + x, window.innerHeight * 0.062);
+        }
+
+        if(!this.started) {
+            this.ctx.textAlign = 'left';
+            this.ctx.fillText('You', 0,(0.5 - paddleHeight * .65) * this.ctx.canvas.clientHeight);
         }
     }
 
@@ -69,7 +72,10 @@ export default class Game {
     }
 
     start() {
-        console.log('start game');
         this.started = true;
+    }
+
+    stop() {
+        this.started = false;
     }
 }

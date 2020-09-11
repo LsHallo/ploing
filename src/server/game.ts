@@ -43,13 +43,6 @@ export default class Game {
         }
     }
 
-    start() {
-        console.log('[Pong]: Game started!');
-        this.running = true;
-        this.lastUpdate = new Date().getTime();
-        this.update();
-    }
-
     update() {
         let time = new Date().getTime();
         let delta = (time - this.lastUpdate) / this.targetUpdate;
@@ -66,7 +59,9 @@ export default class Game {
         }
         this.namespace.emit('server-ball', this.ball.pos);
 
-        setTimeout(this.update.bind(this), this.targetUpdate);
+        if(this.running) {
+            setTimeout(this.update.bind(this), this.targetUpdate);
+        }
         this.lastUpdate = time;
     }
 
@@ -77,5 +72,16 @@ export default class Game {
             }
         }
         return true;
+    }
+
+    start() {
+        console.log('[Pong]: Game started!');
+        this.running = true;
+        this.lastUpdate = new Date().getTime();
+        this.update();
+    }
+
+    stop() {
+        this.running = false;
     }
 }

@@ -13,20 +13,7 @@
     {{#lobbies}}
         <tr>
             <td>/lobby/{{id}}</td>
-            <td>
-                <table>
-                    <tr>
-                        <th>ID</th>
-                        <th>Ready</th>
-                    </tr>
-                    {{#game.players}}
-                    <tr>
-                        <td>{{id}}</td>
-                        <td>{{ready}}</td>
-                    </tr>
-                    {{/game.players}}
-                </table>
-            </td>
+            <td>{{game.players.length}}</td>
             <td>{{game.running}}</td>
         </tr>
     {{/lobbies}}

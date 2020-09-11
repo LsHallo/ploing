@@ -18,6 +18,7 @@ export default class Lobby {
                 this.game.playerJoin(socket.id);
                 if(this.game.running) {
                     socket.emit('game-start');
+                    this.namespace.emit('score-initial', [this.game.players[0].score, this.game.players[1].score]);
                 }
                 socket.emit('player-num', this.game.players.indexOf(this.game.getPlayer(socket.id)));
             } else {
@@ -27,6 +28,8 @@ export default class Lobby {
             socket.on('disconnect', () => {
                 console.log("[Socket.IO]: Client '" + socket.id + "' disconnected!");
                 this.game.playerLeave(socket.id);
+                this.game.stop();
+                this.namespace.emit('game-stop');
             });
             socket.on('player-ready', (data: boolean) => {
                 console.log('[Socket.IO]: Player \'' + socket.id + '\' is ready!');
@@ -37,7 +40,6 @@ export default class Lobby {
                 }
             });
             socket.on('paddle-update', (data: any) => {
-                console.log('[Socket.IO]: paddle-update: ' + data);
                 for(let player of this.game.players) {
                     if(player !== null) {
                         if (player.id !== socket.id) {
@@ -59,6 +61,8 @@ export default class Lobby {
                 if (!player.ready) {
                     ready = false;
                 }
+            } else {
+                ready = false;
             }
         }
         return ready;

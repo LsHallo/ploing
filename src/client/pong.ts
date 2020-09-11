@@ -37,15 +37,27 @@ socket.on('connect', () => {
     console.log(socket.id);
 });
 socket.on('lobby-full', () => {
-    alert('Lobby already full!');
+    canvas.style.display = 'none';
+    let refresh = document.createElement('div');
+    refresh.innerHTML = '<h2>Lobby full!</h2>Please refresh to reconnect.<br>Or create a <a href="/">new lobby</a>.';
+    refresh.style.fontFamily = 'Roboto, Arial, sans-serif';
+    refresh.style.fontSize = '3em';
+    refresh.style.color = '#eee';
+    document.getElementsByTagName('body')[0].appendChild(refresh);
     socket.disconnect();
+    //alert('Lobby already full!');
 });
 socket.on('player-num', (data: number) => {
    game.playerNumber = data;
    console.log('You are player number ' + data);
 });
 socket.on('game-start', () => {
+    console.log('Game start!');
     game.start();
+});
+socket.on('game-stop', () => {
+   console.log('Game stop!');
+   game.stop();
 });
 socket.on('paddle-update', (data: any) => {
     game.paddles[1].y = data;
@@ -60,10 +72,11 @@ socket.on('server-ball', (data: Vector) => {
     server_ball = data;
 });
 socket.on('score', (data: any) => {
-    console.log('Player ' + data + ' scores!');
     game.scores[data]++;
-})
-
+});
+socket.on('score-initial', (data: any) => {
+    game.scores = data;
+});
 let lastTime = new Date().getTime();
 draw();
 function draw() {
@@ -74,11 +87,12 @@ function draw() {
     let time = new Date().getTime();
     ctx.fillStyle = '#C3C3C3';
     ctx.font = '18px Arial';
+    ctx.textAlign = 'left';
     ctx.fillText(Math.round(1000 / (time - lastTime)).toString() + "fps", 2, 20);
     lastTime = time;
 
     ctx.fillStyle = '#FF0000';
-    ctx.fillRect(server_ball.x * ctx.canvas.clientWidth, server_ball.y * ctx.canvas.clientHeight, 5, 5);
+    ctx.fillRect(Math.abs((game.playerNumber === 0?0:1) - server_ball.x) * ctx.canvas.clientWidth, server_ball.y * ctx.canvas.clientHeight, 5, 5);
 }
 
 let lastUpdate = new Date().getTime();

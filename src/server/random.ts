@@ -9,4 +9,12 @@ function generateId(length: number = 12): string {
     return chars;
 }
 
-export {generateId}
+function random(min: number, max: number) {
+    let random = Math.random() * (max - min) + min;
+    while(random === 0) {
+        random = Math.random() * (max - min) + min;
+    }
+    return random;
+}
+
+export {generateId, random}

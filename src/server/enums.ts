@@ -15,6 +15,7 @@ export const targetFrameRate = 30;
 
 export const ballSize = 0.04;
 export const ballInitialSpeed = 0.02;
+export const MaxBounceAngle = Math.PI;
 
 export const paddleHeight = 0.15;
 export const paddleWidth = 0.02;
