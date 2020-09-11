@@ -91,8 +91,10 @@ function draw() {
     ctx.fillText(Math.round(1000 / (time - lastTime)).toString() + "fps", 2, 20);
     lastTime = time;
 
-    ctx.fillStyle = '#FF0000';
-    ctx.fillRect(Math.abs((game.playerNumber === 0?0:1) - server_ball.x) * ctx.canvas.clientWidth, server_ball.y * ctx.canvas.clientHeight, 5, 5);
+    if(localStorage.debug === 'pong') {
+        ctx.fillStyle = '#FF0000';
+        ctx.fillRect(Math.abs((game.playerNumber === 0 ? 0 : 1) - server_ball.x) * ctx.canvas.clientWidth, server_ball.y * ctx.canvas.clientHeight, 5, 5);
+    }
 }
 
 let lastUpdate = new Date().getTime();

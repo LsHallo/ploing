@@ -43,11 +43,12 @@ export default class Game {
 
         //Draw score
         this.ctx.fillStyle = '#FFFFFF';
-        this.ctx.font = window.innerHeight * 0.06 + 'px "8 Bit", Arial';
+        this.ctx.font = window.innerHeight * 0.075 + 'px "8 Bit", Arial';
         for(let i = 0; i < this.scores.length; i++) {
-            let x = i === this.playerNumber?-35:35;
-            this.ctx.textAlign = i === this.playerNumber?'right':'left';
-            this.ctx.fillText(this.scores[i].toString(), this.ctx.canvas.clientWidth / 2 + x, window.innerHeight * 0.062);
+            let centerOffset = this.ctx.canvas.clientWidth * 0.03;
+            let x = (i === this.playerNumber?-centerOffset+centerOffset/3:centerOffset);
+            this.ctx.textAlign = i === this.playerNumber?'end':'start';
+            this.ctx.fillText(this.scores[i].toString(), this.ctx.canvas.clientWidth / 2 + x, this.ctx.canvas.clientHeight * 0.077);
         }
 
         if(!this.started) {

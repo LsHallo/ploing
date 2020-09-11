@@ -19,8 +19,10 @@ export default class Ball {
         this.ctx.fillStyle = '#FFFFFF';
         let x = Math.abs((playerNumber === 0?0:1) - this.pos.x);
         this.ctx.fillRect(x * this.ctx.canvas.clientWidth - actualSize / 2, this.pos.y * this.ctx.canvas.clientHeight - actualSize / 2, actualSize, actualSize);
-        this.ctx.fillStyle = '#FF0000';
-        this.ctx.fillRect(x * this.ctx.canvas.clientWidth - 3, this.pos.y * this.ctx.canvas.clientHeight - 3, 6, 6);
+        if(localStorage.debug === 'pong') {
+            this.ctx.fillStyle = '#FF0000';
+            this.ctx.fillRect(x * this.ctx.canvas.clientWidth - 3, this.pos.y * this.ctx.canvas.clientHeight - 3, 6, 6);
+        }
     }
 
     update(delta: number) {
