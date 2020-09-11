@@ -2,11 +2,52 @@ body, html {
   padding: 0;
   margin: 0;
   background-color: #212020;
+  font-family: Roboto, sans-serif;
 }
 
 #game {
   margin-top: 7px;
-  margin-left: 6px;
+  margin-left: 50%;
+  transform: translate(-50%);
+}
+
+.modal {
+  position: fixed;
+  top: 4em;
+  padding: 1.5em;
+  left: 50%;
+  transform: translate(-50%);
+  z-index: 9999;
+  background-color: #222;
+  color: #eee;
+  border-radius: .5em;
+  box-shadow: 0 0 1.8em rgba(233, 233, 233, .5);
+}
+
+.modal-head {
+  font-size: 2em;
+  font-weight: bold;
+}
+
+.modal-body {
+  font-size: 1.2em;
+}
+
+.keys {
+  list-style: none;
+  padding-inline-start: .3em;
+}
+
+.keys > li {
+  margin-bottom: .3em;
+}
+
+kbd {
+  padding: .2rem .4rem;
+  font-size: 95%;
+  color: #222;
+  background-color: #fefefe;
+  border-radius: .2rem;
 }
 
 @font-face {

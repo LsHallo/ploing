@@ -3,10 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <title>Ploing!</title>
-    <link rel="stylesheet" href="../css/pong.css">
+    <link rel="stylesheet" href="/css/pong.css">
+    <link rel="icon" sizes="256x256" type="image/png" href="/favicon.png">
 </head>
 <body>
+    <div class="modal" id="controls-modal">
+        <div class="modal-head">
+            Ploing! Controls
+        </div>
+        <div class="modal-body">
+            <ul class="keys">
+                <li><kbd>Up/Down Arrow</kbd> Move Paddle</li>
+                <li><kbd>Space</kbd> Ready</li>
+                <li><kbd>M</kbd> Mute</li>
+            </ul>
+        </div>
+    </div>
     <canvas id="game"></canvas>
-    <script src="../client/pong.bundle.js" type="module"></script>
+    <script src="/client/pong.bundle.js" type="module"></script>
 </body>
 </html>

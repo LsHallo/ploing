@@ -14,6 +14,8 @@ app.set('views', path.join(__dirname, '../pages'));
 app.use('/client', express.static(path.join(__dirname, '../client')));
 app.use('/css', express.static(path.join(__dirname, '../css')));
 app.use('/fonts', express.static(path.join(__dirname, '../fonts')));
+app.use('/sounds', express.static(path.join(__dirname, '../sounds')));
+app.use('/favicon.png', express.static(path.join(__dirname, '../favicon.png')));
 app.engine('mustache', mustache());
 app.set('view engine', 'mustache');
 app.get('/', (req, res) => {
@@ -38,6 +40,23 @@ app.get('/lobby/:lobbyId', (req, res) => {
         //res.status(404).render('lobbyNotFound', {lobbyId});
         //res.status(404).send('Lobby not found.<br><a href="/">Start a new one</a>');
         res.redirect(307, '/');
+        console.log('[Express]: Lobby \'' + lobbyId + '\' requested. Not found!');
+    }
+});
+
+//Lobby is requested from invited player
+app.get('/lobby/:lobbyId/spectate', (req, res) => {
+    let lobbyId = req.params.lobbyId;
+    let lobby = lobbies.filter(l => l.id === lobbyId)[0];
+    if(lobby) {
+        //res.render('lobby', {lobbyId, rules: lobby.getRules()});
+        //res.send('Lobby found');
+        console.log('[Express]: Lobby \'' + lobbyId + '\' spectation requested. Found!');
+        res.render('lobby');
+    } else {
+        //console.log('Lobby \'' + lobbyId + '\' not found');
+        //res.status(404).render('lobbyNotFound', {lobbyId});
+        res.status(404).send('Lobby not found.<br><a href="/">Start a new one</a>');
         console.log('[Express]: Lobby \'' + lobbyId + '\' requested. Not found!');
     }
 });

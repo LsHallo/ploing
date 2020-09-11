@@ -10,6 +10,11 @@ let ctx = canvas.getContext('2d');
 let game = new Game(socket, ctx);
 let server_ball: Vector = new Vector(0,0);
 (<any>window).debug = localStorage.debug === 'pong';
+let scoreSound = new Audio('/sounds/score.mp3');
+scoreSound.volume = .3;
+let bounceSound = new Audio('/sounds/bounce.mp3');
+bounceSound.volume = .15;
+let muted = JSON.parse(localStorage.getItem('muted'));
 
 window.addEventListener('keydown', (e) => {
     if(e.code === 'ArrowUp' || e.code === 'KeyW') {
@@ -19,6 +24,11 @@ window.addEventListener('keydown', (e) => {
     }
     if(e.code === 'Space') {
         socket.emit('player-ready', true);
+        document.getElementById('controls-modal').style.display = 'none';
+    }
+    if(e.code === 'KeyM') {
+        muted = !muted;
+        localStorage.setItem('muted', muted);
     }
 });
 
@@ -68,6 +78,13 @@ socket.on('ball-update', (data: any) => {
     game.ball.setSpeed(data[1]);
     if(data[2] === 0 || data[2] === 1) {
         game.scores[data[2]]++;
+        if(!muted) {
+            scoreSound.play();
+        }
+    } else {
+        if(!muted) {
+            bounceSound.play();
+        }
     }
 });
 socket.on('server-ball', (data: Vector) => {
