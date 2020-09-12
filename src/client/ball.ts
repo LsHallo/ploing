@@ -46,4 +46,8 @@ export default class Ball {
         this.speed.x = obj.x;
         this.speed.y = obj.y;
     }
+
+    getSpeed(): Vector {
+        return this.speed;
+    }
 }

@@ -40,6 +40,8 @@ export default class Game {
 
         //Draw ball
         this.ball.draw(this.playerNumber);
+        //const speed = this.ball.getSpeed();
+        //this.ctx.fillText('x: ' + Math.round(speed.x * 10000) / 100 + ' y: ' + Math.round(speed.y * 10000) / 100, 0, 60);
 
         //Draw score
         this.ctx.fillStyle = '#FFFFFF';

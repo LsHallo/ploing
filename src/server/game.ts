@@ -56,6 +56,7 @@ export default class Game {
                     this.players[update].score++;
                 }
             } else {
+                this.ball.speed.mul(1.015);
                 this.namespace.emit('ball-update', [this.ball.pos, this.ball.speed]);
             }
         }

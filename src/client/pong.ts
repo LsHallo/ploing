@@ -102,7 +102,7 @@ function draw() {
     //FPS display
     let time = new Date().getTime();
     ctx.fillStyle = '#C3C3C3';
-    ctx.font = '18px Arial';
+    ctx.font = '12px Arial';
     ctx.textAlign = 'left';
     ctx.fillText(Math.round(1000 / (time - lastTime)).toString() + "fps", 2, 20);
     lastTime = time;

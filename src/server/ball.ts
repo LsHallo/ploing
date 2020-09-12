@@ -1,5 +1,5 @@
 import Vector from "./vector";
-import {ballInitialSpeed, ballSize, MaxBounceAngle, paddleHeight, paddleWidth} from "./enums";
+import {ballInitialSpeed, ballSize, MaxBounceAngle, paddleHeight, paddleWidth, Side} from "./enums";
 import Player from "./player";
 import {random} from "./random";
 
@@ -25,13 +25,7 @@ export default class Ball {
                     this.speed = new Vector(this.initial_speed, this.initial_speed * random(-.6, .6));
                     return 1;
                 } else {
-                    /*
-                    let relativeIntersectY = p0PaddleY - this.pos.y;
-                    let normalizedRelativeIntersectY = relativeIntersectY / (paddleHeight / 2);
-                    let bounceAngle = normalizedRelativeIntersectY * MaxBounceAngle;
-                    this.speed.x = this.initial_speed * Math.cos(bounceAngle);
-                    this.speed.y = this.initial_speed * Math.sin(bounceAngle);
-                    this.pos.x = this.size / 2 + paddleWidth;*/
+                    //this.speed = this.calcBounceAngle(Side.LEFT, p0PaddleY, this.pos.y);
                     this.speed.x *= -1;
                     this.pos.x = this.size / 2 + paddleWidth;
                     return -1;
@@ -47,15 +41,7 @@ export default class Ball {
                     this.speed = new Vector(-this.initial_speed, this.initial_speed * random(-.6, .6));
                     return 0;
                 } else {
-                    /*let relativeIntersectY = p1PaddleY - this.pos.y;
-                    console.log('rel' + relativeIntersectY);
-                    let normalizedRelativeIntersectY = relativeIntersectY / (paddleHeight / 2);
-                    console.log('norm' + normalizedRelativeIntersectY);
-                    let bounceAngle = normalizedRelativeIntersectY * MaxBounceAngle;
-                    console.log('ang' + bounceAngle);
-                    this.speed.x = -this.initial_speed * Math.cos(bounceAngle);
-                    this.speed.y = this.initial_speed * Math.sin(bounceAngle);
-                    this.pos.x = 1 - this.size / 2 - paddleWidth;*/
+                    //this.speed = this.calcBounceAngle(Side.RIGHT, p1PaddleY, this.pos.y);
                     this.speed.x *= -1;
                     this.pos.x = 1 - this.size / 2 - paddleWidth;
                     return -1;
@@ -67,5 +53,22 @@ export default class Ball {
             this.pos.y = Math.max(Math.min(this.pos.y, 1 - this.size / 2), this.size / 2);
             return -1;
         }
+    }
+
+    //calcBounceAngle(player: Side, paddlePos: number, ballPos: number): number {
+        //const relativeIntersect = (ballPos + ballSize - paddlePos + paddleHeight / 2) / (paddleHeight + ballSize);
+        //const bounceAngle = normalizedIntersect * MaxBounceAngle;
+
+        //let phi = 0.25 * Math.PI * (2 * relativeIntersect - 1)
+
+        //return this.initial_speed * Math.sin(phi);
+    //}
+
+    calcBounceAngle(player: Side, paddlePos: number, ballPos: number): Vector {
+        const intersect = (ballPos - paddlePos) / paddleHeight;
+        const normalizedIntersect = intersect / (paddleHeight / 2);
+
+        return new Vector(this.initial_speed * Math.cos(normalizedIntersect), this.initial_speed * Math.sin(normalizedIntersect));
+
     }
 }

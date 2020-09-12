@@ -17,7 +17,7 @@
     "watch:compile": "npm-run-all --parallel watch:client watch:server",
     "watch:files": "copy-and-watch --watch static/**/* dist/client",
     "watch:sass": "sass --watch sass:dist/client/css",
-    "watch:nodemon": "nodemon --watch dist/server/main.js --watch dist/server --watch dist/pages -e js,json,mjs,html,mustache"
+    "watch:nodemon": "nodemon --watch dist/server/main.js --watch dist/server --watch dist/client -e ts,js,json,mjs,html,mustache"
   },
   "keywords": ["pong", "ball", "paddle", "game", "multiplayer"],
   "author": "LsHallo",
