@@ -10,9 +10,9 @@ let ctx = canvas.getContext('2d');
 let game = new Game(socket, ctx);
 let server_ball: Vector = new Vector(0,0);
 (<any>window).debug = localStorage.debug === 'pong';
-let scoreSound = new Audio('/sounds/score.mp3');
+let scoreSound = new Audio('/static/sounds/score.mp3');
 scoreSound.volume = .3;
-let bounceSound = new Audio('/sounds/bounce.mp3');
+let bounceSound = new Audio('/static/sounds/bounce.mp3');
 bounceSound.volume = .15;
 let muted = JSON.parse(localStorage.getItem('muted'));
 

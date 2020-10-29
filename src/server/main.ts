@@ -10,9 +10,10 @@ const mustache = require('mustache-express');
 let lobbies: Lobby[] = [];
 
 app.set('views', path.join(__dirname, '../client/pages'));
-app.use('/', express.static(path.join(__dirname, '../client'), {redirect: false}));
+app.use('/static', express.static(path.join(__dirname, '../client'), {redirect: false}));
 app.engine('mustache', mustache());
 app.set('view engine', 'mustache');
+
 app.get('/', (req, res) => {
     //res.send('Hello World!');
     //res.sendFile(__dirname + '/pages/lobby.mustache');

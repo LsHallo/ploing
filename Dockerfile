@@ -7,6 +7,6 @@ RUN npm install --silent --quiet
 
 COPY . /app/
 RUN npm run build
-#RUN npm prune --production
+RUN npm prune --production
 
 CMD ["node", "/app/dist/server/main.js"]
