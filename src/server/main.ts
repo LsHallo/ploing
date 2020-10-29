@@ -1,7 +1,6 @@
 import express from 'express';
 import Lobby from './lobby'
 import path from "path";
-import lobby from "./lobby";
 const port = process.env.PORT || 3560;
 const app = express();
 const server = require('http').createServer(app);
@@ -11,7 +10,7 @@ const mustache = require('mustache-express');
 let lobbies: Lobby[] = [];
 
 app.set('views', path.join(__dirname, '../client/pages'));
-app.use('/', express.static(path.join(__dirname, '../client')));
+app.use('/', express.static(path.join(__dirname, '../client'), {redirect: false}));
 app.engine('mustache', mustache());
 app.set('view engine', 'mustache');
 app.get('/', (req, res) => {
