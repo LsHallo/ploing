@@ -6,10 +6,12 @@ const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 const mustache = require('mustache-express');
+const morgan = require('morgan');
 
 let lobbies: Lobby[] = [];
 
 app.set('views', path.join(__dirname, '../client/pages'));
+app.use(morgan('dev'));
 app.use('/static', express.static(path.join(__dirname, '../client'), {redirect: false}));
 app.engine('mustache', mustache());
 app.set('view engine', 'mustache');
